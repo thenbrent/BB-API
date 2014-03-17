@@ -2,7 +2,7 @@
 /**
  * Forum post type handlers
  *
- * @package WordPress
+ * @package bbPress
  * @subpackage JSON API
  */
 

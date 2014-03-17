@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: bbPress JSON API
-Description: Extend the <a href="">WP API</a> to create a JSON-based REST API for bbPress forums, topics & replies.
+Description: Extend the <a href="https://github.com/WP-API/WP-API">WP API</a> to create a JSON-based REST API for bbPress forums, topics & replies.
 Author: Brent Shepherd
 Author URI: http://brent.io
 Version: 1.0
@@ -61,3 +61,4 @@ function bbp_json_api_filters( $server ) {
 	$bbp_json_forums = new BBP_JSON_Forums( $server );
 }
 add_action( 'wp_json_server_before_serve', 'bbp_json_api_filters', 10, 1 );
+
