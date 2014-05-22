@@ -40,18 +40,18 @@ class BBP_JSON_Topics extends WP_JSON_CustomPostType {
 	 * @param array $routes Existing routes
 	 * @return array Modified routes
 	 */
-	public function registerRoutes( $routes ) {
+	public function register_routes( $routes ) {
 
-		$routes = parent::registerRoutes( $routes );
+		$routes = parent::register_routes( $routes );
 
 		// Add topic's replies route
 		$routes[ $this->base . '/(?P<id>\d+)/replies'] = array(
-			array( array( $this, 'getPostsByParent' ), WP_JSON_Server::READABLE ),
+			array( array( $this, 'get_posts_by_parent' ), WP_JSON_Server::READABLE ),
 		);
 
 		// Add user's topics route
 		$routes['/users/(?P<user>\d+)' . $this->base] = array(
-			array( array( $this, 'getUsersPosts' ), WP_JSON_Server::READABLE ),
+			array( array( $this, 'get_users_posts' ), WP_JSON_Server::READABLE ),
 		);
 
 		return $routes;
@@ -81,11 +81,11 @@ class BBP_JSON_Topics extends WP_JSON_CustomPostType {
 	 *
 	 * Kind of like bbp_get_user_topics_started()
 	 *
-	 * @see WP_JSON_Posts::getPosts()
+	 * @see WP_JSON_Posts::get_posts()
 	 */
-	public function getUsersPosts( $user, $context = 'view' ) {
+	public function get_users_posts( $user, $context = 'view' ) {
 
-		return parent::getPosts( array( 'author' => $user ), $context );
+		return parent::get_posts( array( 'author' => $user ), $context );
 	}
 
 	/**
@@ -93,12 +93,12 @@ class BBP_JSON_Topics extends WP_JSON_CustomPostType {
 	 *
 	 * Kind of like bbp_get_user_topics_started()
 	 *
-	 * @see WP_JSON_Posts::getPosts()
+	 * @see WP_JSON_Posts::get_posts()
 	 */
-	public function getPostsByParent( $id, $context = 'view' ) {
+	public function get_posts_by_parent( $id, $context = 'view' ) {
 		global $bbp_json_replies;
 
-		return $bbp_json_replies->getPosts( array( 'post_parent' => $id ), $context );
+		return $bbp_json_replies->get_posts( array( 'post_parent' => $id ), $context );
 	}
 
 }

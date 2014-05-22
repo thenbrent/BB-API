@@ -45,6 +45,7 @@ function bbp_json_api_filters( $server ) {
 	}
 
 	$bbp_json_replies = new BBP_JSON_Replies( $server );
+	$bbp_json_replies->register_filters();
 
 	// Topics
 	if ( ! class_exists( 'BBP_JSON_Topics' ) ) {
@@ -52,6 +53,7 @@ function bbp_json_api_filters( $server ) {
 	}
 
 	$bbp_json_topics = new BBP_JSON_Topics( $server );
+	$bbp_json_topics->register_filters();
 
 	// Forums
 	if ( ! class_exists( 'BBP_JSON_Forums' ) ) {
@@ -59,6 +61,8 @@ function bbp_json_api_filters( $server ) {
 	}
 
 	$bbp_json_forums = new BBP_JSON_Forums( $server );
+	$bbp_json_forums->register_filters();
+
 }
 add_action( 'wp_json_server_before_serve', 'bbp_json_api_filters', 10, 1 );
 
