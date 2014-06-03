@@ -35,6 +35,18 @@ class BBP_JSON_Topics extends WP_JSON_CustomPostType {
 	protected $type = 'topic'; // bbp_get_topic_post_type()
 
 	/**
+	 * Add actions and filters for the post type
+	 *
+	 * This method should be called after instantiation to automatically add the
+	 * required filters for the post type.
+	 */
+	public function register_filters() {
+		parent::register_filters();
+
+		add_action( 'json_insert_post', array( $this, 'add_protected_meta' ), 10, 3 );
+	}
+
+	/**
 	 * Register the page-related routes
 	 *
 	 * @param array $routes Existing routes
@@ -101,4 +113,40 @@ class BBP_JSON_Topics extends WP_JSON_CustomPostType {
 		return $bbp_json_replies->get_posts( array( 'post_parent' => $id ), $context );
 	}
 
+	/**
+	 * When inserting a new topic, make sure the protected meta data is set correctly.
+	 *
+	 * We can't use WP_JSON_Posts::add_meta() here because the required meta is deemed
+	 * protected by @see is_protected_meta().
+	 *
+	 * @see WP_JSON_Posts::insert_post()
+	 * @see WP_JSON_Posts::add_meta()
+	 */
+	public function add_protected_meta( $post, $data, $update ) {
+
+		if ( ! $update && $this->type == $post['post_type'] ) {
+
+			$topic_meta = array(
+				'author_ip'          => bbp_current_author_ip(),
+				'forum_id'           => $post['post_parent'],
+				'topic_id'           => $post['ID'],
+				'voice_count'        => 1,
+				'reply_count'        => 0,
+				'reply_count_hidden' => 0,
+				'last_reply_id'      => 0,
+				'last_active_id'     => $post['ID'],
+				'last_active_time'   => get_post_field( 'post_date', $post['ID'], 'db' ),
+			);
+
+			// Insert topic meta
+			foreach ( $topic_meta as $meta_key => $meta_value ) {
+				update_post_meta( $post['ID'], '_bbp_' . $meta_key, $meta_value );
+			}
+
+			// Update the forum
+			if ( ! empty( $post['post_parent'] ) ) {
+				bbp_update_forum( array( 'forum_id' => $forum_id ) );
+			}
+		}
+	}
 }
