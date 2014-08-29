@@ -1,7 +1,7 @@
 BB-API
 ======
 
-Adds bbPress forum, topic and reply routes to the [WP JSON API](github.com/WP-API/WP-API).
+Adds bbPress forum, topic and reply routes to the [WP JSON API](https://github.com/WP-API/WP-API).
 
 Example endpoints:
 
